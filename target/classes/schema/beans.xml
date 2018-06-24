@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+<aop:config proxy-target-class="true">
+    <aop:pointcut id="greetToPointcut" expression="target(com.smart.aspectj.fun.NaiveWaiter)
+        and execution (* greetTo(..))" />
+
+    <aop:aspect ref = "adviceMethods">
+        <!-- 匿名切点 -->
+       <!-- <aop:before pointcut="target(com.smart.aspectj.fun.NaiveWaiter) and execution (* greetTo(..))"
+                    method="preGreeting" />-->
+        <aop:before method="preGreeting" pointcut-ref="greetToPointcut" />
+        <aop:after-returning method="afterReturing" pointcut="target(com.smart.aspectj.fun.SmartSeller)" returning="retVal" />
+        <aop:around method="aroundMethod" pointcut-ref="greetToPointcut" />
+    </aop:aspect>
+
+</aop:config>
+
+<bean id="adviceMethods" class="com.smart.schema.AdviceMethods" />
+<bean id="naiveWaiter" class="com.smart.aspectj.fun.NaiveWaiter" />
+<bean id="naughtyWaiter" class="com.smart.aspectj.fun.NaughtyWaiter" />
+
+</beans>
